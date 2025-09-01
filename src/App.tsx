@@ -16,8 +16,8 @@ function App() {
 
       <hr className="my-10" />
 
-      <h2 className="text-2xl font-medium mb-6">Editor output in html:</h2>
-      <div className="p-3 border rounded-md bg-white mb-10">
+      <div className="p-3 border rounded-md bg-white mb-10 max-w-3xl w-full mx-auto">
+        <h2 className="text-2xl font-medium mb-6">Editor output in html:</h2>
         <pre className="text-wrap">
           {post ? post : "Try editing to see output"}
         </pre>
