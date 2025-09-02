@@ -66,7 +66,7 @@ const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
     },
     onUpdate: ({ editor }) => {
       onChange({
-        html: editor.getHTML(),
+        html: `<div id="post-wrapper">${editor.getHTML()}</div>`,
         json: JSON.stringify(editor.getJSON()),
       });
     },

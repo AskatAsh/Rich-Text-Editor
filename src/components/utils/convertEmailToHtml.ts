@@ -3,6 +3,10 @@ import juice from "juice";
 export function convertToEmailHtml(html: string) {
   // CSS for the editor content
   const css = `
+    #post-wrapper{
+      padding: 10px;
+      border: 1px solid #e6e6e6;
+    }
     h1 {
       font-size: 1.875rem;
       font-weight: 500;
@@ -70,7 +74,6 @@ export function convertToEmailHtml(html: string) {
     ol {
       list-style-type: decimal;
       padding-left: 1.25rem;
-      font-weight: 500;
     }
     ol li { padding-left: 0.375rem; }
     ol li p { margin-top: 0.5rem; margin-bottom: 0.5rem; }
