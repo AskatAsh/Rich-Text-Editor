@@ -58,15 +58,15 @@ export default function UploadPanelComponent({ editor }: NodeViewProps) {
       ) : (
         <>
           <div className="inline-flex items-center gap-1.5">
-            <p>Drag & drop an image here, or </p>
+            <p className="hidden sm:block">Drag & drop an image here, or </p>
             <label
               htmlFor="file"
-              className="underline underline-offset-1 cursor-pointer"
+              className="underline underline-offset-1 cursor-pointer select-none"
             >
-              click to upload
+              Click to upload
             </label>
           </div>
-          <span className="block text-sm font-medium">
+          <span className="block text-sm font-medium select-none">
             [ Note: Small images are uploaded faster ]
           </span>
         </>
