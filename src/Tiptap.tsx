@@ -26,6 +26,7 @@ const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
         bulletList: false,
         orderedList: false,
         link: false,
+        dropcursor: false,
       }),
       Image,
       UploadPanel,

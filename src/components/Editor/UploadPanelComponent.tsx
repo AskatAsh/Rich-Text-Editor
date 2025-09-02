@@ -26,11 +26,29 @@ export default function UploadPanelComponent({ editor }: NodeViewProps) {
       const url = await uploadToImgbb(file);
       if (url) {
         setLoading(false);
+        // editor
+        //   .chain()
+        //   .focus()
+        //   .deleteNode("uploadPanel")
+        //   .setImage({ src: url })
+        //   .run();
         editor
           .chain()
           .focus()
-          .deleteNode("uploadPanel") // remove the panel
-          .setImage({ src: url }) // insert image
+          .command(({ tr, state }) => {
+            let replaced = false;
+            const { doc, schema } = state;
+
+            doc.descendants((node, pos) => {
+              if (node.type.name === "uploadPanel" && !replaced) {
+                const imageNode = schema.nodes.image.create({ src: url });
+                tr.replaceWith(pos, pos + node.nodeSize, imageNode);
+                replaced = true;
+              }
+            });
+
+            return true;
+          })
           .run();
       }
     },
