@@ -10,6 +10,7 @@ import {
   Heading3,
   Heading4,
   Highlighter,
+  ImagePlus,
   Italic,
   List,
   ListOrdered,
@@ -53,6 +54,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
 
       // Blocks
       isBlockquote: ctx.editor?.isActive("blockquote") ?? false,
+      isUploadPanel: ctx.editor?.isActive("uploadPanel") ?? false,
 
       // Text align
       isAlignLeft: ctx.editor?.isActive({ textAlign: "left" }) ?? false,
@@ -158,6 +160,14 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       onClick: () => editor.chain().focus().toggleOrderedList().run(),
     },
 
+    // image upload
+    {
+      icon: <ImagePlus className="size-4" />,
+      active: editorState?.isUploadPanel,
+      onClick: () =>
+        editor?.chain().focus().insertContent({ type: "uploadPanel" }).run(),
+    },
+
     // History
     {
       icon: <Undo className="size-4" />,
@@ -189,6 +199,13 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           </Toggle>
         );
       })}
+      {/* <Toggle
+        onClick={() =>
+          editor?.chain().focus().insertContent({ type: "uploadPanel" }).run()
+        }
+      >
+        <ImagePlus />
+      </Toggle> */}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { BulletList, OrderedList } from "@tiptap/extension-list";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "./../node_modules/@tiptap/extension-text-align/src/index";
+import { UploadPanel } from "./components/Editor/UploadPanel";
 import { Toolbar } from "./components/Toolbar/Toolbar";
 import { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
 
@@ -21,6 +22,7 @@ const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
         orderedList: false,
       }),
       Image,
+      UploadPanel,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
