@@ -20,6 +20,7 @@ import {
   Underline,
   Undo,
 } from "lucide-react";
+import { LinkButton } from "../Editor/LinkButton";
 import { Toggle } from "../ui/toggle";
 
 interface ToolbarProps {
@@ -41,6 +42,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       canStrike: ctx.editor?.can().chain().toggleStrike().run() ?? false,
       isHighlight: ctx.editor?.isActive("highlight") ?? false,
       canHighlight: ctx.editor?.can().chain().toggleHighlight().run() ?? false,
+
+      // link
+      isLink: ctx.editor?.isActive("link") ?? false,
 
       // Headings
       isHeading1: ctx.editor?.isActive("heading", { level: 1 }) ?? false,
@@ -70,6 +74,18 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   if (!editor) return null;
 
   const Options = [
+    // History
+    {
+      icon: <Undo className="size-4" />,
+      disabled: !editorState?.canUndo,
+      onClick: () => editor.chain().focus().undo().run(),
+    },
+    {
+      icon: <Redo className="size-4" />,
+      disabled: !editorState?.canRedo,
+      onClick: () => editor.chain().focus().redo().run(),
+    },
+
     // Headings
     {
       icon: <Heading1 className="size-4" />,
@@ -167,18 +183,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       onClick: () =>
         editor?.chain().focus().insertContent({ type: "uploadPanel" }).run(),
     },
-
-    // History
-    {
-      icon: <Undo className="size-4" />,
-      disabled: !editorState?.canUndo,
-      onClick: () => editor.chain().focus().undo().run(),
-    },
-    {
-      icon: <Redo className="size-4" />,
-      disabled: !editorState?.canRedo,
-      onClick: () => editor.chain().focus().redo().run(),
-    },
   ];
 
   return (
@@ -199,13 +203,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           </Toggle>
         );
       })}
-      {/* <Toggle
-        onClick={() =>
-          editor?.chain().focus().insertContent({ type: "uploadPanel" }).run()
-        }
-      >
-        <ImagePlus />
-      </Toggle> */}
+      <LinkButton editor={editor} isActive={editorState?.isLink} />
     </div>
   );
 };

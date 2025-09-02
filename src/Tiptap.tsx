@@ -1,17 +1,22 @@
 // src/Tiptap.tsx
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import { BulletList, OrderedList } from "@tiptap/extension-list";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "./../node_modules/@tiptap/extension-text-align/src/index";
 import { UploadPanel } from "./components/Editor/UploadPanel";
 import { Toolbar } from "./components/Toolbar/Toolbar";
-import { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
+
+type EditorOutput = {
+  html: string;
+  json: string;
+};
 
 interface RichTextEditorProps {
-  content: string;
-  onChange: (content: string) => void;
+  content: EditorOutput;
+  onChange: (content: EditorOutput) => void;
 }
 
 const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
@@ -20,9 +25,18 @@ const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
       StarterKit.configure({
         bulletList: false,
         orderedList: false,
+        link: false,
       }),
       Image,
       UploadPanel,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          rel: "noopener noreferrer nofollow",
+          target: "_blank",
+          class: "text-blue-600 underline",
+        },
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -42,15 +56,18 @@ const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
         },
       }),
     ], // define your extension array
-    content: content, // initial content
+    content: content.html, // initial content
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none border-0 p-4 min-h-[250px] bg-white",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none border-0 p-4 min-h-[250px] max-h-[500px] bg-white overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500",
       },
     },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      onChange({
+        html: editor.getHTML(),
+        json: JSON.stringify(editor.getJSON()),
+      });
     },
   });
 
@@ -61,10 +78,7 @@ const Tiptap = ({ content, onChange }: RichTextEditorProps) => {
       </h1>
       <section className="shadow-md rounded-b-md overflow-hidden">
         <Toolbar editor={editor} />
-        <ScrollArea className="h-[500px] border border-gray-200 border-t-0">
-          <EditorContent editor={editor} />
-          <ScrollBar />
-        </ScrollArea>
+        <EditorContent editor={editor} />
       </section>
     </div>
   );
