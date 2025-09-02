@@ -19,7 +19,7 @@ function App() {
 
   const onChange = (content: EditorOutput) => {
     setPost(content);
-    console.log(content.json);
+    // console.log(content.json);
   };
 
   return (
