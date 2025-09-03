@@ -51,7 +51,7 @@ export function LinkButton({ editor, isActive }: LinkButtonProps) {
           variant={isActive ? "secondary" : "ghost"}
           size="sm"
           onClick={() => setOpen(true)}
-          className={cn("hover:bg-slate-200 cursor-pointer h-9", {
+          className={cn("hover:bg-slate-200 cursor-pointer", {
             "bg-slate-200": isActive,
           })}
         >

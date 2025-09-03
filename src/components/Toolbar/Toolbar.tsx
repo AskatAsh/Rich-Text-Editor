@@ -1,3 +1,12 @@
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useEditorState, type Editor } from "@tiptap/react";
 import {
@@ -5,6 +14,7 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
+  Heading,
   Heading1,
   Heading2,
   Heading3,
@@ -86,28 +96,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       onClick: () => editor.chain().focus().redo().run(),
     },
 
-    // Headings
-    {
-      icon: <Heading1 className="size-4" />,
-      active: editorState?.isHeading1,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-    },
-    {
-      icon: <Heading2 className="size-4" />,
-      active: editorState?.isHeading2,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-    },
-    {
-      icon: <Heading3 className="size-4" />,
-      active: editorState?.isHeading3,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-    },
-    {
-      icon: <Heading4 className="size-4" />,
-      active: editorState?.isHeading4,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
-    },
-
     // Marks
     {
       icon: <Bold className="size-4" />,
@@ -185,6 +173,51 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     },
   ];
 
+  const HeadingOptions = [
+    {
+      label: "Heading-1",
+      icon: <Heading1 className="size-4" />,
+      active: editorState?.isHeading1,
+      onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+    },
+    {
+      label: "Heading-2",
+      icon: <Heading2 className="size-4" />,
+      active: editorState?.isHeading2,
+      onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+    },
+    {
+      label: "Heading-3",
+      icon: <Heading3 className="size-4" />,
+      active: editorState?.isHeading3,
+      onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+    },
+    {
+      label: "Heading-4",
+      icon: <Heading4 className="size-4" />,
+      active: editorState?.isHeading4,
+      onClick: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
+    },
+  ];
+
+  const handleHeadingsChange = (value: string) => {
+    console.log(value);
+    switch (value) {
+      case "Heading-1":
+        editor.chain().focus().toggleHeading({ level: 1 }).run();
+        break;
+      case "Heading-2":
+        editor.chain().focus().toggleHeading({ level: 2 }).run();
+        break;
+      case "Heading-3":
+        editor.chain().focus().toggleHeading({ level: 3 }).run();
+        break;
+      case "Heading-4":
+        editor.chain().focus().toggleHeading({ level: 4 }).run();
+        break;
+    }
+  };
+
   return (
     <div className="border rounded-t-md p-1 bg-slate-50 flex flex-wrap gap-1 z-50">
       {Options.map((option, index) => {
@@ -198,12 +231,65 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
             className={cn("hover:bg-slate-200 cursor-pointer", {
               "data-[state=on]:bg-slate-200": option.active,
             })}
+            size="sm"
           >
             {option.icon}
           </Toggle>
         );
       })}
+
+      {/* link apply */}
       <LinkButton editor={editor} isActive={editorState?.isLink} />
+
+      {/* heading selection */}
+      <Select
+        value={
+          editorState?.isHeading1
+            ? "Heading-1"
+            : editorState?.isHeading1
+            ? "Heading-2"
+            : editorState?.isHeading3
+            ? "Heading-3"
+            : editorState?.isHeading4
+            ? "Heading-4"
+            : ""
+        }
+        onValueChange={(value) => handleHeadingsChange(value)}
+      >
+        <SelectTrigger
+          title="Heading"
+          size="sm"
+          className={cn(
+            "cursor-pointer w-12 focus:outline-0 p-1 gap-0.5 justify-center outline-0 shadow-none",
+            {
+              "bg-slate-200":
+                editorState?.isHeading1 ||
+                editorState?.isHeading1 ||
+                editorState?.isHeading3 ||
+                editorState?.isHeading4,
+            }
+          )}
+        >
+          <SelectValue placeholder={<Heading />} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Headings</SelectLabel>
+            {HeadingOptions.map((heading) => (
+              <SelectItem
+                key={heading.label}
+                value={heading.label}
+                title={heading.label}
+                className={cn("hover:bg-slate-200 cursor-pointer", {
+                  "data-[state=on]:bg-slate-200": heading.active,
+                })}
+              >
+                {heading.icon}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 };
